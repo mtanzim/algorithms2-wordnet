@@ -1,11 +1,11 @@
 import edu.princeton.cs.algs4.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class SAP {
     private Topological topo;  // topological order
+
     private Digraph G;
     private String strRep;
 
@@ -16,12 +16,11 @@ public class SAP {
         }
         this.G = G;
         topo = new Topological(G);
-        StdOut.println(this.G);
+
         strRep = this.G.toString();
-        StdOut.println(topo.isDAG());
-        StdOut.println(topo.order());
-
-
+        StdOut.println(this.G);
+//        StdOut.println(topo.isDAG());
+//        StdOut.println(topo.order());
     }
 
     public String dotGen() {
@@ -47,25 +46,29 @@ public class SAP {
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
-        int curAncestor = -1;
+//        int curAncestor = -1;
         List<Integer> possibleAncestors = new Stack<Integer>();
-        for (int cur : topo.order()) {
-            possibleAncestors.add(cur);
-            if (cur == v || cur == w) {
-                break;
-            }
-        }
-        List<Integer> curList = new ArrayList<Integer>();
-        curList.add(v);
-        curList.add(w);
-        for (int cur : possibleAncestors) {
-            curList.add(cur);
-            StdOut.println(cur);
-            BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(G, curList);
-            curList.remove(2);
-        }
 
-        return 0;
+        StdOut.println("\nv: " + v + " w: " + w);
+        StdOut.println("Topo order: " + topo.order());
+        BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(G, v);
+        BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(G, w);
+        boolean vMarked = false;
+        boolean wMarked = false;
+        for (int cur : topo.order()) {
+            if (cur == v) vMarked = true;
+            if (cur == w) wMarked = true;
+            if (vMarked && wMarked) {
+                if (bfsV.hasPathTo(cur) && bfsW.hasPathTo(cur)) {
+                    StdOut.println(cur + " : " + bfsV.pathTo(cur));
+                    StdOut.println(cur + " : " + bfsW.pathTo(cur));
+                    return cur;
+
+                }
+            }
+
+        }
+        return -1;
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
@@ -82,9 +85,12 @@ public class SAP {
         In in = new In(args[0]);
         Digraph G = new Digraph(in);
         SAP sap = new SAP(G);
-        sap.ancestor(8, 9);
-        StdOut.println("dotfile");
-        StdOut.println(sap.dotGen());
+//        StdOut.println("dotfile");
+//        StdOut.println(sap.dotGen());
+        StdOut.println("ancestor: " + sap.ancestor(3, 11));
+        StdOut.println("ancestor: " + sap.ancestor(9, 12));
+        StdOut.println("ancestor: " + sap.ancestor(7, 2));
+        StdOut.println("ancestor: " + sap.ancestor(1, 6));
     }
 
 }
