@@ -7,6 +7,7 @@ import java.util.Stack;
 public class SAP {
     private Topological topo;  // topological order
     private Digraph G;
+    private String strRep;
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
@@ -15,12 +16,29 @@ public class SAP {
         }
         this.G = G;
         topo = new Topological(G);
-        StdOut.println(G);
+        StdOut.println(this.G);
+        strRep = this.G.toString();
         StdOut.println(topo.isDAG());
         StdOut.println(topo.order());
 
 
     }
+
+    public String dotGen() {
+        String lines[] = strRep.split("\\r?\\n");
+        StringBuilder s = new StringBuilder();
+        s.append("Digraph G {\n");
+        for (int i = 1; i < lines.length; i++) {
+            String temp = lines[i].replaceAll(": ", "->");
+            temp = temp.replaceAll(" ", "->");
+            temp = temp.replaceAll("->(?!\\d)", "");
+            s.append("\t" + temp);
+            s.append("\n");
+        }
+        s.append("}\n");
+        return s.toString();
+    }
+
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
@@ -65,8 +83,8 @@ public class SAP {
         Digraph G = new Digraph(in);
         SAP sap = new SAP(G);
         sap.ancestor(8, 9);
-
-
+        StdOut.println("dotfile");
+        StdOut.println(sap.dotGen());
     }
 
 }
