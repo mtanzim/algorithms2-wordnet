@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2fc825ae-939a-4589-ac3d-6b969df484fd" name="Default Changelist" comment="cp: add asssertions">
+    <list default="true" id="2fc825ae-939a-4589-ac3d-6b969df484fd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SAP.java" beforeDir="false" afterPath="$PROJECT_DIR$/SAP.java" afterDir="false" />
     </list>
@@ -30,7 +30,6 @@
   <component name="FindBugs-IDEA-Workspace">
     <analyzeAfterCompile>true</analyzeAfterCompile>
     <toolWindowToFront>false</toolWindowToFront>
-    <toolWindowEditorPreview>false</toolWindowEditorPreview>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -77,7 +76,7 @@
     <configuration name="SAP" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="SAP" />
       <module name="wordnet" />
-      <option name="PROGRAM_PARAMETERS" value="digraph1.txt" />
+      <option name="PROGRAM_PARAMETERS" value="digraph25.txt" />
       <option name="VM_PARAMETERS" value="-ea" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -128,6 +127,7 @@
     <MESSAGE value="cp: add asssertions" />
     <MESSAGE value="cp: remove optimizations" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="cp: start iterable versions" />
+    <option name="LAST_COMMIT_MESSAGE" value="cp: start iterable versions" />
   </component>
 </project>
