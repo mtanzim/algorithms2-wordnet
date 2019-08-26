@@ -35,31 +35,25 @@ public class SAP {
     }
 
 
-    // length of shortest ancestral path between v and w; -1 if no such path
     private int common(int v, int w, boolean isDist) {
         boolean debug = false;
         if (debug) StdOut.println("\nv: " + v + " w: " + w);
         BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(G, v);
         BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(G, w);
-        boolean vMarked = false;
-        boolean wMarked = false;
         for (int cur : topo.order()) {
-            if (cur == v) vMarked = true;
-            if (cur == w) wMarked = true;
-            if (vMarked && wMarked) {
-                if (bfsV.hasPathTo(cur) && bfsW.hasPathTo(cur)) {
-                    if (debug) StdOut.println(cur + " : " + bfsV.pathTo(cur));
-                    if (debug) StdOut.println(cur + " : " + bfsW.pathTo(cur));
-                    int dist = bfsW.distTo(cur) + bfsV.distTo(cur);
-                    if (debug) StdOut.println("dist: " + dist);
-                    if (isDist) return dist;
-                    return cur;
-                }
+            if (bfsV.hasPathTo(cur) && bfsW.hasPathTo(cur)) {
+                if (debug) StdOut.println(cur + " : " + bfsV.pathTo(cur));
+                if (debug) StdOut.println(cur + " : " + bfsW.pathTo(cur));
+                int dist = bfsW.distTo(cur) + bfsV.distTo(cur);
+                if (debug) StdOut.println("dist: " + dist);
+                if (isDist) return dist;
+                return cur;
             }
 
         }
         return -1;
     }
+
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
