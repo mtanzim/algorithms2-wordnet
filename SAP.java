@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.*;
 
+import java.util.ArrayList;
+
 public class SAP {
     private Topological topo;  // topological order
     private Digraph G;
@@ -34,8 +36,7 @@ public class SAP {
         return s.toString();
     }
 
-
-    private int common(int v, int w, boolean isDist) {
+    private int common(Iterable<Integer> v, Iterable<Integer> w, boolean isDist) {
         boolean debug = false;
         if (debug) StdOut.println("\nv: " + v + " w: " + w);
         BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(G, v);
@@ -49,7 +50,6 @@ public class SAP {
                 if (isDist) return dist;
                 return cur;
             }
-
         }
         return -1;
     }
@@ -57,22 +57,30 @@ public class SAP {
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
-        return common(v, w, true);
+        ArrayList<Integer> vIter = new ArrayList<Integer>();
+        ArrayList<Integer> wIter = new ArrayList<Integer>();
+        vIter.add(v);
+        wIter.add(w);
+        return common(vIter, wIter, true);
     }
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
-        return common(v, w, false);
+        ArrayList<Integer> vIter = new ArrayList<Integer>();
+        ArrayList<Integer> wIter = new ArrayList<Integer>();
+        vIter.add(v);
+        wIter.add(w);
+        return common(vIter, wIter, false);
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
-        return 0;
+        return common(v, w, true);
     }
 
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
-        return 0;
+        return common(v, w, false);
     }
 
     public static void main(String[] args) {
