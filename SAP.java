@@ -1,10 +1,13 @@
-import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
+import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SAP {
-    private Topological topo;  // topological order
+    //    private Topological topo;  // topological order, need this?
     private Digraph G;
     private String strRep;
     private static final int INFINITY = Integer.MAX_VALUE;
@@ -16,10 +19,10 @@ public class SAP {
             throw new IllegalArgumentException("invalid arg");
         }
         this.G = G;
-        topo = new Topological(G);
+//        topo = new Topological(G);
         strRep = this.G.toString();
         if (debug) StdOut.println(dotGen());
-        if (debug) StdOut.println("topological order: " + topo.order());
+//        if (debug) StdOut.println("topological order: " + topo.order());
 
     }
 
@@ -39,13 +42,14 @@ public class SAP {
     }
 
     private int common(Iterable<Integer> v, Iterable<Integer> w, boolean isDist) {
-        boolean debug = false;
+        boolean debug = true;
         int minDist = INFINITY;
         int curMinAnc = -1;
         if (debug) StdOut.println("\nv: " + v + " w: " + w);
         BreadthFirstDirectedPaths bfsV = new BreadthFirstDirectedPaths(G, v);
         BreadthFirstDirectedPaths bfsW = new BreadthFirstDirectedPaths(G, w);
-        for (int cur : topo.order()) {
+//        for (int cur : topo.order()) {
+        for (int cur = 0; cur < G.V(); cur++) {
             if (bfsV.hasPathTo(cur) && bfsW.hasPathTo(cur)) {
                 int dist = bfsW.distTo(cur) + bfsV.distTo(cur);
                 if (debug) StdOut.println("\ndist: " + dist);
