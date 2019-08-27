@@ -1,12 +1,15 @@
+import edu.princeton.cs.algs4.Bag;
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
+
 public class WordNet {
+    private ArrayList<String> synA = new ArrayList<String>();
+    private ArrayList<Bag> hypA = new ArrayList<Bag>();
 
-    private String synsets;
-    private String hypernyms;
-
-    public WordNet(String _synsets, String _hypernyms) {
-        if (_synsets == null || _hypernyms == null) {
+    public WordNet(String synsets, String hypernyms) {
+        if (synsets == null || hypernyms == null) {
             throw new IllegalArgumentException("invalid arg");
         }
         // TODO:
@@ -15,8 +18,41 @@ public class WordNet {
         // The input to the constructor does not correspond to a rooted DAG.
         // Any of the noun arguments in distance() or sap() is not a WordNet noun.
 
-        synsets = _synsets;
-        hypernyms = _hypernyms;
+
+        StdOut.println(synsets);
+        StdOut.println(hypernyms);
+        In inSyn = new In(synsets);
+        In inHyp = new In(hypernyms);
+//        StdOut.println(inSyn.readAll());
+//        StdOut.println(inHyp.readAll());
+
+
+        int i = 0;
+        while (inSyn.hasNextLine()) {
+            String curLine = inSyn.readLine();
+//            StdOut.println(curLine);
+            String tokens[] = curLine.split(",");
+            int curId = Integer.parseInt(tokens[0]);
+            assert (curId == i);
+            String curSyn = tokens[1];
+            StdOut.println("id: " + curId + " word: " + curSyn);
+            synA.add(curSyn);
+            i++;
+        }
+        i = 0;
+        while (inHyp.hasNextLine()) {
+            String curLine = inHyp.readLine();
+//            StdOut.println(curLine);
+            String tokens[] = curLine.split(",");
+            int curId = Integer.parseInt(tokens[0]);
+            assert (curId == i);
+            Bag curHyps = new Bag();
+            for (int k = 1; k < tokens.length; k++) {
+                curHyps.add(tokens[k]);
+            }
+            hypA.add(curHyps);
+            i++;
+        }
     }
 
     // returns all WordNet nouns
@@ -42,9 +78,7 @@ public class WordNet {
 
     // do unit testing of this class
     public static void main(String[] args) {
-        WordNet w = new WordNet("asdasd", "asdasd");
-        w.sap("a", "b");
-        StdOut.println("Going bottom");
+        WordNet w = new WordNet("synsets.txt", "hypernyms.txt");
     }
 
 }

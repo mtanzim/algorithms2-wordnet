@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2fc825ae-939a-4589-ac3d-6b969df484fd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SAP.java" beforeDir="false" afterPath="$PROJECT_DIR$/SAP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WordNet.java" beforeDir="false" afterPath="$PROJECT_DIR$/WordNet.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +68,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.SAP">
+  <component name="RunManager" selected="Application.WordNet">
     <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
@@ -87,6 +87,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="WordNet" />
       <module name="wordnet" />
+      <option name="VM_PARAMETERS" value="-ea" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -129,6 +130,7 @@
     <MESSAGE value="fix" />
     <MESSAGE value="cp: start iterable versions" />
     <MESSAGE value="readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="readme" />
+    <MESSAGE value="remove dependence on topo" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove dependence on topo" />
   </component>
 </project>
