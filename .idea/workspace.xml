@@ -133,4 +133,20 @@
     <MESSAGE value="remove dependence on topo" />
     <option name="LAST_COMMIT_MESSAGE" value="remove dependence on topo" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WordNet.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="synRBBST.size()" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
 </project>

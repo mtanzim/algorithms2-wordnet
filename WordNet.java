@@ -1,12 +1,50 @@
 import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.RedBlackBST;
 import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
 
 public class WordNet {
     private ArrayList<String> synA = new ArrayList<String>();
+    private RedBlackBST<String, Integer> synRBBST = new RedBlackBST<String, Integer>();
     private ArrayList<Bag> hypA = new ArrayList<Bag>();
+
+    private void makeSyn(String synsets) {
+        boolean debug = false;
+        In inSyn = new In(synsets);
+        int i = 0;
+        while (inSyn.hasNextLine()) {
+            String curLine = inSyn.readLine();
+            String tokens[] = curLine.split(",");
+            int curId = Integer.parseInt(tokens[0]);
+            assert (curId == i);
+            String curSyn = tokens[1];
+            if (debug) StdOut.println("id: " + curId + " word: " + curSyn);
+            synRBBST.put(curSyn, curId);
+            synA.add(curSyn);
+            i++;
+        }
+    }
+
+    private void makeHyp(String hypernyms) {
+        boolean debug = true;
+        In inHyp = new In(hypernyms);
+        int i = 0;
+        while (inHyp.hasNextLine()) {
+            String curLine = inHyp.readLine();
+            String tokens[] = curLine.split(",");
+            int curId = Integer.parseInt(tokens[0]);
+            assert (curId == i);
+            Bag curHyps = new Bag();
+            for (int k = 1; k < tokens.length; k++) {
+                curHyps.add(tokens[k]);
+                if (debug) StdOut.println(tokens[k]);
+            }
+            hypA.add(curHyps);
+            i++;
+        }
+    }
 
     public WordNet(String synsets, String hypernyms) {
         if (synsets == null || hypernyms == null) {
@@ -18,51 +56,19 @@ public class WordNet {
         // The input to the constructor does not correspond to a rooted DAG.
         // Any of the noun arguments in distance() or sap() is not a WordNet noun.
 
+        makeSyn(synsets);
+//        makeHyp(hypernyms);
 
-        StdOut.println(synsets);
-        StdOut.println(hypernyms);
-        In inSyn = new In(synsets);
-        In inHyp = new In(hypernyms);
-//        StdOut.println(inSyn.readAll());
-//        StdOut.println(inHyp.readAll());
-
-
-        int i = 0;
-        while (inSyn.hasNextLine()) {
-            String curLine = inSyn.readLine();
-//            StdOut.println(curLine);
-            String tokens[] = curLine.split(",");
-            int curId = Integer.parseInt(tokens[0]);
-            assert (curId == i);
-            String curSyn = tokens[1];
-            StdOut.println("id: " + curId + " word: " + curSyn);
-            synA.add(curSyn);
-            i++;
-        }
-        i = 0;
-        while (inHyp.hasNextLine()) {
-            String curLine = inHyp.readLine();
-//            StdOut.println(curLine);
-            String tokens[] = curLine.split(",");
-            int curId = Integer.parseInt(tokens[0]);
-            assert (curId == i);
-            Bag curHyps = new Bag();
-            for (int k = 1; k < tokens.length; k++) {
-                curHyps.add(tokens[k]);
-            }
-            hypA.add(curHyps);
-            i++;
-        }
     }
 
     // returns all WordNet nouns
     public Iterable<String> nouns() {
-        return null;
+        return synRBBST.keys();
     }
 
     // is the word a WordNet noun?
     public boolean isNoun(String word) {
-        return false;
+        return synRBBST.contains(word);
     }
 
     // distance between nounA and nounB
@@ -79,6 +85,11 @@ public class WordNet {
     // do unit testing of this class
     public static void main(String[] args) {
         WordNet w = new WordNet("synsets.txt", "hypernyms.txt");
+        for (String noun : w.nouns()) {
+            StdOut.println(noun);
+        }
+        StdOut.println(w.isNoun("oogla"));
+        StdOut.println(w.isNoun("zygospore"));
     }
 
 }
