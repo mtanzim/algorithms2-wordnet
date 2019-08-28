@@ -1,16 +1,69 @@
-import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.RedBlackBST;
+import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class WordNet {
-    private ArrayList<String> synA = new ArrayList<String>();
+
+
+    //    class Node implements Comparable<Node> {
+    class Node {
+        int id;
+        String word;
+        String synsets[];
+
+        public Node(int id, String synsets[]) {
+            this.id = id;
+            this.synsets = synsets;
+            this.word = synsets[0];
+        }
+
+        public String[] getSynsets() {
+            return synsets;
+        }
+
+        public String getWord() {
+            return word;
+        }
+
+        private String synsetToString() {
+            String v = "";
+            for (String synset : synsets) {
+                v += synset + " ";
+            }
+            return v;
+        }
+
+        public String toString() {
+            return "id: " + id + " synsets: " + synsetToString() + "\n";
+        }
+    }
+
+    class SortById implements Comparator<Node> {
+        public int compare(Node a, Node b) {
+            return a.id - b.id;
+        }
+    }
+
+    class SortByWord implements Comparator<Node> {
+        public int compare(Node a, Node b) {
+            return a.word.compareTo(b.word);
+        }
+    }
+
+    private ArrayList<Node> synA = new ArrayList<Node>();
     private RedBlackBST<String, Integer> synRBBST = new RedBlackBST<String, Integer>();
-    private ArrayList<Bag> hypA = new ArrayList<Bag>();
     private Digraph hypG;
     private SAP sap;
 
+
     private void makeSyn(String synsets) {
         boolean debug = false;
+
+
         In inSyn = new In(synsets);
         int i = 0;
         while (inSyn.hasNextLine()) {
@@ -19,12 +72,30 @@ public class WordNet {
             int curId = Integer.parseInt(tokens[0]);
             assert (curId == i);
             String curSynset[] = tokens[1].split(" ");
+            String curWord = curSynset[0];
             for (String word : curSynset) {
                 synRBBST.put(word, curId);
                 if (debug) StdOut.println("id: " + curId + " word: " + word);
 
             }
-            synA.add(tokens[1]);
+            synA.add(new Node(curId, curSynset));
+            i++;
+        }
+
+        StdOut.println("pre-sort: ");
+        i = 0;
+        for (Node node : synA) {
+            StdOut.println(node.toString());
+            if (i == 10) break;
+            i++;
+        }
+
+        synA.sort(new SortByWord());
+        StdOut.println("post-sort: ");
+        i = 0;
+        for (Node node : synA) {
+            StdOut.println(node.toString());
+            if (i == 10) break;
             i++;
         }
     }
@@ -48,6 +119,7 @@ public class WordNet {
     }
 
     public WordNet(String synsets, String hypernyms) {
+        boolean debug = false;
         if (synsets == null || hypernyms == null) {
             throw new IllegalArgumentException("invalid arg");
         }
@@ -60,7 +132,7 @@ public class WordNet {
         makeSyn(synsets);
         makeHyp(hypernyms);
         sap = new SAP(hypG);
-
+        if (debug) sizes();
     }
 
     // returns all WordNet nouns
@@ -68,8 +140,13 @@ public class WordNet {
         return synRBBST.keys();
     }
 
-    public int numNouns() {
-        return synRBBST.size();
+    private void sizes() {
+        StdOut.println("Number of synset words: ");
+        StdOut.println(synRBBST.size());
+        StdOut.println("Number of hyp vertices: ");
+        StdOut.println(hypG.V());
+        StdOut.println("Number of hyp edges: ");
+        StdOut.println(hypG.E());
     }
 
     // is the word a WordNet noun?
@@ -98,7 +175,7 @@ public class WordNet {
 
         }
 
-        return synA.get(sap.ancestor(a, b));
+        return synA.get(sap.ancestor(a, b)).getWord();
     }
 
     // do unit testing of this class
@@ -112,7 +189,6 @@ public class WordNet {
 //        StdOut.println(w.isNoun("zygospore"));
 //        StdOut.println(w.distance("worm", "bird"));
         StdOut.println(w.sap("louse", "shuttle"));
-        StdOut.println("number of words: " + w.numNouns());
     }
 
 }

@@ -42,7 +42,7 @@ public class SAP {
     }
 
     private int common(Iterable<Integer> v, Iterable<Integer> w, boolean isDist) {
-        boolean debug = true;
+        boolean debug = false;
         int minDist = INFINITY;
         int curMinAnc = -1;
         if (debug) StdOut.println("\nv: " + v + " w: " + w);
