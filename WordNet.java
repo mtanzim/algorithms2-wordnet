@@ -14,11 +14,17 @@ public class WordNet {
         int id;
         String word;
         String synsets[];
+        private boolean debug = false;
 
         public Node(int id, String synsets[]) {
             this.id = id;
             this.synsets = synsets;
             this.word = synsets[0];
+        }
+
+        //        for searching
+        public Node(String word) {
+            this.word = word;
         }
 
         public String[] getSynsets() {
@@ -38,7 +44,8 @@ public class WordNet {
         }
 
         public String toString() {
-            return "id: " + id + " synsets: " + synsetToString() + "\n";
+            if (debug) return "id: " + id + " synsets: " + synsetToString();
+            return synsetToString();
         }
     }
 
@@ -55,7 +62,7 @@ public class WordNet {
     }
 
     private ArrayList<Node> synA = new ArrayList<Node>();
-    private RedBlackBST<String, Integer> synRBBST = new RedBlackBST<String, Integer>();
+    private RedBlackBST<String, ArrayList<Integer>> synRBBST = new RedBlackBST<String, ArrayList<Integer>>();
     private Digraph hypG;
     private SAP sap;
 
@@ -73,8 +80,20 @@ public class WordNet {
             assert (curId == i);
             String curSynset[] = tokens[1].split(" ");
             String curWord = curSynset[0];
+//            THIS PART IS KEY!!!!!!!!
             for (String word : curSynset) {
-                synRBBST.put(word, curId);
+//                Bag curIds = synRBBST.get(word);
+                ArrayList<Integer> curIds = synRBBST.get(word);
+                if (curIds == null) {
+                    ArrayList<Integer> newIds = new ArrayList<Integer>();
+                    newIds.add(curId);
+                    synRBBST.put(word, newIds);
+                } else {
+                    curIds.add(curId);
+                    synRBBST.put(word, curIds);
+
+                }
+//                synRBBST.put(word, curId);
                 if (debug) StdOut.println("id: " + curId + " word: " + word);
 
             }
@@ -82,21 +101,26 @@ public class WordNet {
             i++;
         }
 
-        StdOut.println("pre-sort: ");
-        i = 0;
-        for (Node node : synA) {
-            StdOut.println(node.toString());
-            if (i == 10) break;
-            i++;
+        if (debug) {
+            StdOut.println("pre-sort: ");
+            i = 0;
+            for (Node node : synA) {
+                StdOut.println(node.toString());
+                if (i == 10) break;
+                i++;
+            }
         }
 
         synA.sort(new SortByWord());
-        StdOut.println("post-sort: ");
-        i = 0;
-        for (Node node : synA) {
-            StdOut.println(node.toString());
-            if (i == 10) break;
-            i++;
+
+        if (debug) {
+            StdOut.println("post-sort: ");
+            i = 0;
+            for (Node node : synA) {
+                StdOut.println(node.toString());
+                if (i == 10) break;
+                i++;
+            }
         }
     }
 
@@ -156,26 +180,46 @@ public class WordNet {
 
     // distance between nounA and nounB
     public int distance(String nounA, String nounB) {
-        if (!(isNoun(nounA) && isNoun(nounB))) throw new IllegalArgumentException("noun not found");
-        int a = synRBBST.get(nounA);
-        int b = synRBBST.get(nounB);
+//        int a = synRBBST.get(nounA);
+//        int b = synRBBST.get(nounB);
+        ArrayList<Integer> a = synRBBST.get(nounA);
+        ArrayList<Integer> b = synRBBST.get(nounB);
         return sap.length(a, b);
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
-        boolean debug = true;
+        boolean debug = false;
         if (!(isNoun(nounA) && isNoun(nounB))) throw new IllegalArgumentException("noun not found");
-        int a = synRBBST.get(nounA);
-        int b = synRBBST.get(nounB);
+//        int indexA = Collections.binarySearch(synA, new Node(nounA), new SortByWord());
+//        int indexB = Collections.binarySearch(synA, new Node(nounB), new SortByWord());
+        ArrayList<Integer> a = synRBBST.get(nounA);
+        ArrayList<Integer> b = synRBBST.get(nounB);
         if (debug) {
+            StdOut.println("synset ids for " + nounA);
+            for (Object item : a) {
+                StdOut.println(item);
+            }
+            StdOut.println("synset ids for " + nounB);
+
+            for (Object item : b) {
+                StdOut.println(item);
+            }
+        }
+        /*if (debug) {
+            StdOut.println("found indices for " + nounA + " and " + nounB);
+            StdOut.println(a);
+            StdOut.println(b);
+            StdOut.println(indexA);
+            StdOut.println(indexB);
             StdOut.println(synA.get(a));
             StdOut.println(synA.get(b));
+            StdOut.println(synA.get(indexA));
+            StdOut.println(synA.get(indexB));
+        }*/
 
-        }
-
-        return synA.get(sap.ancestor(a, b)).getWord();
+        return synA.get(sap.ancestor(a, b)).toString();
     }
 
     // do unit testing of this class
@@ -185,10 +229,14 @@ public class WordNet {
         for (String noun : w.nouns()) {
             if (debug) StdOut.println(noun);
         }
-//        StdOut.println(w.isNoun("oogla"));
-//        StdOut.println(w.isNoun("zygospore"));
-//        StdOut.println(w.distance("worm", "bird"));
-        StdOut.println(w.sap("louse", "shuttle"));
+        StdOut.println(w.isNoun("oogla"));
+        StdOut.println(w.isNoun("zygospore"));
+        StdOut.println(w.distance("worm", "bird"));
+        StdOut.println(w.sap("worm", "bird"));
+        StdOut.println(w.distance("white_marlin", "mileage"));
+        StdOut.println(w.distance("Black_Plague", "black_marlin"));
+        StdOut.println(w.distance("American_water_spaniel", "histology"));
+        StdOut.println(w.distance("Brown_Swiss", "barrel_roll"));
     }
 
 }
