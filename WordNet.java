@@ -229,14 +229,26 @@ public class WordNet {
         for (String noun : w.nouns()) {
             if (debug) StdOut.println(noun);
         }
-        StdOut.println(w.isNoun("oogla"));
-        StdOut.println(w.isNoun("zygospore"));
-        StdOut.println(w.distance("worm", "bird"));
-        StdOut.println(w.sap("worm", "bird"));
-        StdOut.println(w.distance("white_marlin", "mileage"));
-        StdOut.println(w.distance("Black_Plague", "black_marlin"));
-        StdOut.println(w.distance("American_water_spaniel", "histology"));
-        StdOut.println(w.distance("Brown_Swiss", "barrel_roll"));
+        boolean test1 = w.isNoun("oogla");
+        boolean test2 = w.isNoun("zygospore");
+        int test3 = w.distance("worm", "bird");
+        String test4 = w.sap("worm", "bird");
+        int test5 = w.distance("white_marlin", "mileage");
+        int test6 = w.distance("Black_Plague", "black_marlin");
+        int test7 = w.distance("American_water_spaniel", "histology");
+        int test8 = w.distance("Brown_Swiss", "barrel_roll");
+
+        assert !test1;
+        assert test2;
+        assert test3 == 5;
+        StdOut.println(test4);
+//        assert test4 == "animal animate_being beast brute creature fauna ";
+        assert test5 == 23;
+        assert test6 == 33;
+        assert test7 == 27;
+        assert test8 == 29;
+
+
     }
 
 }
