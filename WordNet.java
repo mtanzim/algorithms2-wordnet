@@ -1,6 +1,6 @@
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.RedBlackBST;
+import edu.princeton.cs.algs4.LinearProbingHashST;
 import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class WordNet {
     }
 
     private ArrayList<Node> synA = new ArrayList<Node>();
-    private RedBlackBST<String, ArrayList<Integer>> synRBBST = new RedBlackBST<String, ArrayList<Integer>>();
+    private LinearProbingHashST<String, ArrayList<Integer>> synH = new LinearProbingHashST<String, ArrayList<Integer>>();
     private Digraph hypG;
     private SAP sap;
 
@@ -79,21 +79,18 @@ public class WordNet {
             int curId = Integer.parseInt(tokens[0]);
             assert (curId == i);
             String curSynset[] = tokens[1].split(" ");
-            String curWord = curSynset[0];
-//            THIS PART IS KEY!!!!!!!!
             for (String word : curSynset) {
-//                Bag curIds = synRBBST.get(word);
-                ArrayList<Integer> curIds = synRBBST.get(word);
+                ArrayList<Integer> curIds = synH.get(word);
                 if (curIds == null) {
                     ArrayList<Integer> newIds = new ArrayList<Integer>();
                     newIds.add(curId);
-                    synRBBST.put(word, newIds);
+                    synH.put(word, newIds);
                 } else {
                     curIds.add(curId);
-                    synRBBST.put(word, curIds);
+                    synH.put(word, curIds);
 
                 }
-//                synRBBST.put(word, curId);
+//                synH.put(word, curId);
                 if (debug) StdOut.println("id: " + curId + " word: " + word);
 
             }
@@ -161,12 +158,12 @@ public class WordNet {
 
     // returns all WordNet nouns
     public Iterable<String> nouns() {
-        return synRBBST.keys();
+        return synH.keys();
     }
 
     private void sizes() {
         StdOut.println("Number of synset words: ");
-        StdOut.println(synRBBST.size());
+        StdOut.println(synH.size());
         StdOut.println("Number of hyp vertices: ");
         StdOut.println(hypG.V());
         StdOut.println("Number of hyp edges: ");
@@ -175,15 +172,15 @@ public class WordNet {
 
     // is the word a WordNet noun?
     public boolean isNoun(String word) {
-        return synRBBST.contains(word);
+        return synH.contains(word);
     }
 
     // distance between nounA and nounB
     public int distance(String nounA, String nounB) {
-//        int a = synRBBST.get(nounA);
-//        int b = synRBBST.get(nounB);
-        ArrayList<Integer> a = synRBBST.get(nounA);
-        ArrayList<Integer> b = synRBBST.get(nounB);
+//        int a = synH.get(nounA);
+//        int b = synH.get(nounB);
+        ArrayList<Integer> a = synH.get(nounA);
+        ArrayList<Integer> b = synH.get(nounB);
         return sap.length(a, b);
     }
 
@@ -194,8 +191,8 @@ public class WordNet {
         if (!(isNoun(nounA) && isNoun(nounB))) throw new IllegalArgumentException("noun not found");
 //        int indexA = Collections.binarySearch(synA, new Node(nounA), new SortByWord());
 //        int indexB = Collections.binarySearch(synA, new Node(nounB), new SortByWord());
-        ArrayList<Integer> a = synRBBST.get(nounA);
-        ArrayList<Integer> b = synRBBST.get(nounB);
+        ArrayList<Integer> a = synH.get(nounA);
+        ArrayList<Integer> b = synH.get(nounB);
         if (debug) {
             StdOut.println("synset ids for " + nounA);
             for (Object item : a) {
