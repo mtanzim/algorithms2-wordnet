@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2fc825ae-939a-4589-ac3d-6b969df484fd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Outcast.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SAP.java" beforeDir="false" afterPath="$PROJECT_DIR$/SAP.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -68,25 +68,26 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.WordNet">
+  <component name="RunManager" selected="Application.Outcast">
     <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
     </configuration>
-    <configuration name="SAP" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="SAP" />
+    <configuration name="Outcast" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Outcast" />
       <module name="wordnet" />
-      <option name="PROGRAM_PARAMETERS" value="digraph25.txt" />
+      <option name="PROGRAM_PARAMETERS" value="synsets.txt hypernyms.txt outcast5.txt outcast8.txt outcast11.txt" />
       <option name="VM_PARAMETERS" value="-ea" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="WordNet" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="11" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="WordNet" />
+    <configuration name="SAP" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="SAP" />
       <module name="wordnet" />
+      <option name="PROGRAM_PARAMETERS" value="digraph25.txt" />
       <option name="VM_PARAMETERS" value="-ea" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -106,7 +107,7 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.WordNet" />
+      <item itemvalue="Application.Outcast" />
       <item itemvalue="Application.SAP" />
     </list>
   </component>
