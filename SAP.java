@@ -15,9 +15,10 @@ public class SAP {
     public SAP(Digraph G) {
         boolean debug = false;
         if (G == null) {
-            throw new IllegalArgumentException("invalid arg");
+            throw new IllegalArgumentException("invalid G");
         }
-        this.G = G;
+        // copy digraph
+        this.G = new Digraph(G);
         strRep = this.G.toString();
         if (debug)
             StdOut.println(dotGen());
@@ -38,8 +39,23 @@ public class SAP {
         return s.toString();
     }
 
+    private void validateInts(Iterable<Integer> v, Iterable<Integer> w) {
+        for (int k : v) {
+            if (k < 0) {
+                throw new IllegalArgumentException("invalid arg");
+            }
+        }
+        for (int k : w) {
+            if (k < 0) {
+                throw new IllegalArgumentException("invalid arg");
+            }
+        }
+    }
+
     private int common(Iterable<Integer> v, Iterable<Integer> w, boolean isDist) {
         boolean debug = false;
+        validateInts(v, w);
+
         int minDist = INFINITY;
         int curMinAnc = -1;
         if (debug)
@@ -49,17 +65,17 @@ public class SAP {
         for (int cur = 0; cur < G.V(); cur++) {
             if (bfsV.hasPathTo(cur) && bfsW.hasPathTo(cur)) {
                 int dist = bfsW.distTo(cur) + bfsV.distTo(cur);
-                if (debug)
+                if (debug) {
                     StdOut.println("\ndist: " + dist);
-                if (debug)
                     StdOut.println(cur + " : " + bfsV.pathTo(cur));
-                if (debug)
                     StdOut.println(cur + " : " + bfsW.pathTo(cur));
+                }
                 if (dist < minDist) {
-                    if (debug)
+                    if (debug) {
                         StdOut.println("changing min dist to: " + dist);
-                    if (debug)
                         StdOut.println("changing min anc to: " + cur);
+
+                    }
                     curMinAnc = cur;
                     minDist = dist;
                 }

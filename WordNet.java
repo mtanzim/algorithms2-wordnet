@@ -1,7 +1,4 @@
-import edu.princeton.cs.algs4.Digraph;
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.LinearProbingHashST;
-import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.*;
 
 import java.util.ArrayList;
 
@@ -59,6 +56,10 @@ public class WordNet {
             }
             i++;
         }
+        DirectedCycle cycle = new DirectedCycle(hypG);
+        if (cycle.hasCycle()) {
+            throw new IllegalArgumentException("Not a DAG");
+        }
         if (debug)
             StdOut.println(hypG.toString());
     }
@@ -68,12 +69,6 @@ public class WordNet {
         if (synsets == null || hypernyms == null) {
             throw new IllegalArgumentException("invalid arg");
         }
-        // TODO:
-        // Corner cases. Throw a java.lang.IllegalArgumentException in the following
-        // situations:
-        // Any argument to the constructor or an instance method is null
-        // The input to the constructor does not correspond to a rooted DAG.
-        // Any of the noun arguments in distance() or sap() is not a WordNet noun.
 
         makeSyn(synsets);
         makeHyp(hypernyms);
@@ -98,11 +93,26 @@ public class WordNet {
 
     // is the word a WordNet noun?
     public boolean isNoun(String word) {
+        if (word == null)
+            throw new IllegalArgumentException("noun is null");
         return wordH.contains(word);
+    }
+
+    private void validateNouns(String nounA, String nounB) {
+        if (nounA == null)
+            throw new IllegalArgumentException("noun is null");
+        if (nounB == null)
+            throw new IllegalArgumentException("noun is null");
+        if (!isNoun(nounA))
+            throw new IllegalArgumentException("noun is not in WordNet");
+        if (!isNoun(nounB))
+            throw new IllegalArgumentException("noun is not in WordNet");
     }
 
     // distance between nounA and nounB
     public int distance(String nounA, String nounB) {
+
+        validateNouns(nounA, nounB);
         ArrayList<Integer> a = wordH.get(nounA);
         ArrayList<Integer> b = wordH.get(nounB);
         return sap.length(a, b);
@@ -113,6 +123,8 @@ public class WordNet {
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
         boolean debug = false;
+        validateNouns(nounA, nounB);
+
         if (!(isNoun(nounA) && isNoun(nounB)))
             throw new IllegalArgumentException("noun not found");
         ArrayList<Integer> a = wordH.get(nounA);

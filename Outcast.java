@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Outcast {
 
-    WordNet wordNet;
+    private WordNet wordNet;
 
     public Outcast(WordNet wordNet) {
         this.wordNet = wordNet;
@@ -16,7 +16,8 @@ public class Outcast {
         for (int i = 0; i < nouns.length; i++) {
             int curSum = 0;
             for (int k = 0; k < nouns.length; k++) {
-                if (k == i) continue;
+                if (k == i)
+                    continue;
                 curSum += wordNet.distance(nouns[i], nouns[k]);
             }
             if (curSum > maxD) {
